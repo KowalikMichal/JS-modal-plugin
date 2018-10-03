@@ -12,3 +12,4 @@ element.modal({
  time: 86400000, //time to show again modal
 });
 </pre>
+<p>Response is saved to localStorage</p>
