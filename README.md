@@ -9,7 +9,7 @@ Usage and confituration:
 element.modal({
  title: "Title of modal",
  text: "Content of modal",
- time: 86400000, //time to show again modal
+ time: 86400000, //time to show again modal in ms; default time to show agin is  24h
 });
 </pre>
-<p>Response is saved to localStorage</p>
+<p>User response is saved to localStorage. After established time modal will show again.</p>
