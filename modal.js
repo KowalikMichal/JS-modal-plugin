@@ -1,3 +1,24 @@
+const style = (function() {
+	const style = document.createElement("style");
+	style.appendChild(document.createTextNode(""));
+	document.head.appendChild(style);
+	return style;
+})();
+
+style.sheet.insertRule(`.modal {display: block;position: fixed;z-index: 1000;padding-top: 100px;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgb(0,0,0);background-color: rgba(0,0,0,0.4);}`, 0);
+style.sheet.insertRule(`.modal-content{display: flex;flex-direction: column;height: 300px;width: 600px;background-color: #fefefe;margin: auto;padding: 0;border: 1px solid #888;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);box-sizing: border-box;animation-name: animatetop;animation-duration: 0.4s}`, 1);
+style.sheet.insertRule(`@keyframes animatetop{from{top:-300px; opacity:0}to {top:0; opacity:1}}`, 2);
+style.sheet.insertRule(`.modal-header{flex: 20%;background-color: #003B6F;color: white;padding-left: 20px;}`,3);
+style.sheet.insertRule(`.modal-body{flex: 60%;	padding-left: 20px;}`,4);
+style.sheet.insertRule(`.modal-footer{color: white;flex: 20%;display: flex;justify-content: space-around;align-items: center;}`,5);
+style.sheet.insertRule(`body.modal-open{overflow: hidden;position: fixed;}`,6);
+style.sheet.insertRule(`.modal-footer button{box-sizing: border-box;border: none;cursor: pointer;padding: 2px;height: 60%;width: 40%;color: white;border-radius: 2px;transition-duration: 0.4s;}`,7)
+style.sheet.insertRule(`.modal-footer button:hover{box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);transform: scale(1.1);}`,8);
+style.sheet.insertRule(`.modal-footer button:active{outline: none;}`,9);
+style.sheet.insertRule(`.modal-footer button[data-action="decline"]{background-color: #e85e6c;}`,10);
+style.sheet.insertRule(`.modal-footer button[data-action="confirm"]{background-color: #47c9a2;}`,11);
+
+
 (function(){
   Object.prototype.modal = function(userConfig){
   	const self = this;
@@ -16,7 +37,6 @@
 		return null;
 	}
 
-
 	const lastDecision = JSON.parse(localStorage.getItem('modalgdpr'));
 	if(lastDecision !== null && lastDecision.timeAction+lastDecision.time > new Date().getTime()) return null;
 	
@@ -32,11 +52,11 @@
 		  modalBody.append(modalText);
 	const buttonConfirm = document.createElement("button");
 		  buttonConfirm.classList.add('button-confirm');
-		  buttonConfirm.textContent = "Confirm";
+		  buttonConfirm.textContent = "Accept";
 		  buttonConfirm.dataset.action = "confirm"
 	const buttonDecline = document.createElement("button");
 		  buttonDecline.classList.add('button-confirm');
-		  buttonDecline.textContent = "Decline";
+		  buttonDecline.textContent = "Cancel";
 		  buttonDecline.dataset.action = "decline";
 	const modalFooter = document.createElement("div");
 		  modalFooter.classList.add('modal-footer');

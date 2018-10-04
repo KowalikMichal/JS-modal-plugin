@@ -2,7 +2,7 @@
 
 ![Screenshot](screenshot.gif)
 
-<p>Require modal.js and style.css.</p>
+<p>Require modal.js.</p>
 
 <pre>
 Usage and confituration:
