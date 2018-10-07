@@ -15,13 +15,13 @@ style.sheet.insertRule(`body.modal-open{overflow: hidden;position: fixed;}`,6);
 style.sheet.insertRule(`.modal-footer button{box-sizing: border-box;border: none;cursor: pointer;padding: 2px;height: 60%;width: 40%;color: white;border-radius: 2px;transition-duration: 0.4s;}`,7)
 style.sheet.insertRule(`.modal-footer button:hover{box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);transform: scale(1.1);}`,8);
 style.sheet.insertRule(`.modal-footer button:active{outline: none;}`,9);
-style.sheet.insertRule(`.modal-footer button[data-action="decline"]{background-color: #e85e6c;}`,10);
-style.sheet.insertRule(`.modal-footer button[data-action="confirm"]{background-color: #47c9a2;}`,11);
+style.sheet.insertRule(`.modal-footer button[data-action="Cancel"]{background-color: #e85e6c;}`,10);
+style.sheet.insertRule(`.modal-footer button[data-action="Accept"]{background-color: #47c9a2;}`,11);
 
 
 (function(){
   Object.prototype.modal = function(userConfig){
-  	const self = this;
+	const self = this;
 	const options = Object.assign({
 	  title: "title",
 	  text: "text",
@@ -30,16 +30,16 @@ style.sheet.insertRule(`.modal-footer button[data-action="confirm"]{background-c
 	}, userConfig);
 
 	if (options.destination == window){
-		options.destination == document.body;
 		document.addEventListener("DOMContentLoaded", function(event) {
-			document.body.modal()
+			options.destination = document.body;
+			document.body.modal(options);
 		});
 		return null;
 	}
 
 	const lastDecision = JSON.parse(localStorage.getItem('modalgdpr'));
-	if(lastDecision !== null && lastDecision.timeAction+lastDecision.time > new Date().getTime()) return null;
-	
+	if(options.time !== null && lastDecision !== null && lastDecision.timeAction+lastDecision.time > new Date().getTime()) return null;
+
 	const title = document.createElement("h2");
 		  title.textContent = options.title;
 	const modalHeader = document.createElement("div");
@@ -53,11 +53,11 @@ style.sheet.insertRule(`.modal-footer button[data-action="confirm"]{background-c
 	const buttonConfirm = document.createElement("button");
 		  buttonConfirm.classList.add('button-confirm');
 		  buttonConfirm.textContent = "Accept";
-		  buttonConfirm.dataset.action = "confirm"
+		  buttonConfirm.dataset.action = "Accept"
 	const buttonDecline = document.createElement("button");
 		  buttonDecline.classList.add('button-confirm');
 		  buttonDecline.textContent = "Cancel";
-		  buttonDecline.dataset.action = "decline";
+		  buttonDecline.dataset.action = "Cancel";
 	const modalFooter = document.createElement("div");
 		  modalFooter.classList.add('modal-footer');
 		  modalFooter.append(buttonConfirm);
@@ -65,27 +65,25 @@ style.sheet.insertRule(`.modal-footer button[data-action="confirm"]{background-c
 	const modalContent = document.createElement("div");
 		  modalContent.classList.add('modal-content');
 		  modalContent.append(modalHeader);
-		  modalContent.append(modalBody);
+		  if(options.text !== null) modalContent.append(modalBody);
 		  modalContent.append(modalFooter);
 	const modal = document.createElement("div");
 		  modal.classList.add('modal');
 		  modal.append(modalContent);
-		  console.log(options.destination);
+
 	options.destination.append(modal);
 	document.body.classList.add('modal-open');
 	modal.addEventListener('click', function(e){
-		console.log(this)
-	  if (e.target.tagName.toLowerCase() === "button"){
-		const modalgdpr = {
-		  timeAction: new Date().getTime(),
-		  action: e.target.dataset.action,
-		  time: options.time,
+		if (e.target.tagName.toLowerCase() === "button"){
+			const modalgdpr = {
+				timeAction: new Date().getTime(),
+				action: e.target.dataset.action,
+				time: options.time,
+			}
+			localStorage.setItem('modalgdpr',JSON.stringify(modalgdpr));
+			this.style.display = "none";
+			document.body.classList.remove('modal-open');
 		}
-		localStorage.setItem('modalgdpr',JSON.stringify(modalgdpr));
-		this.style.display = "none";
-		document.body.classList.remove('modal-open');
-	  }
-	  
 	})
   }
 }());
